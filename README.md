@@ -4,9 +4,9 @@
 
 ## Technologies Used
 
--   React
--   Typescript
--   Redux
--   Redux Toolkit
--   Mantine UI
--   Vite
+-   `React`
+-   `Typescript`
+-   `Redux`
+-   `Redux Toolkit`
+-   `Mantine UI`
+-   `Vite`
