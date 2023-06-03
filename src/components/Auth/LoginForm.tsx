@@ -1,7 +1,7 @@
 import React from "react";
 import { useLoginMutation } from "@/redux/api/authApi";
 
-import { User, LoginResponse, ErrorResponse } from "@/types";
+import { LoginResponse, ErrorResponse } from "@/types";
 import {
     Button,
     Container,
@@ -12,12 +12,11 @@ import {
 } from "@mantine/core";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { useAppDispatch } from "@/redux/hooks";
 import { authActions } from "@/redux/slices/authSlice";
 const LoginScreen = () => {
     const [login, { isLoading }] = useLoginMutation();
 
-    const auth = useAppSelector((state) => state.auth);
     const dispatch = useAppDispatch();
 
     const [username, setUsername] = React.useState("");
