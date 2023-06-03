@@ -2,11 +2,23 @@ import React from "react";
 import { useLoginMutation } from "@/redux/api/authApi";
 
 import { User, LoginResponse, ErrorResponse } from "@/types";
-import { Button, Container, PasswordInput, TextInput } from "@mantine/core";
-import { FiLogIn } from "react-icons/fi";
+import {
+    Button,
+    Container,
+    Flex,
+    PasswordInput,
+    Text,
+    TextInput,
+} from "@mantine/core";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { authActions } from "@/redux/slices/authSlice";
 const LoginScreen = () => {
     const [login, { isLoading }] = useLoginMutation();
+
+    const auth = useAppSelector((state) => state.auth);
+    const dispatch = useAppDispatch();
 
     const [username, setUsername] = React.useState("");
     const [password, setPassword] = React.useState("");
@@ -32,9 +44,11 @@ const LoginScreen = () => {
             const { data } = result as { data: LoginResponse };
             console.log("Login successful:", data);
 
-            const { user } = data.data;
-
-            console.log("user:", user);
+            const {
+                data: { user },
+                token,
+            } = data;
+            dispatch(authActions.setCredentials({ token, user }));
             // Redirect the user to another page or perform any other action
         }
     };
@@ -88,6 +102,11 @@ const LoginScreen = () => {
                     Login
                 </Button>
             </form>
+
+            <Flex direction={"column"} align={"center"}>
+                <Text>Don't have an account?</Text>
+                <Link to="/auth?mode=signup">Signup</Link>
+            </Flex>
         </Container>
     );
 };

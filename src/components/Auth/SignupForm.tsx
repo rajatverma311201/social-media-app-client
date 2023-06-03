@@ -1,11 +1,20 @@
 import React from "react";
 import { useSignupMutation } from "@/redux/api/authApi";
 
-import { User, LoginResponse, ErrorResponse } from "@/types";
-import { Button, Container, PasswordInput, TextInput } from "@mantine/core";
-import { FiLogIn } from "react-icons/fi";
+import { LoginResponse, ErrorResponse } from "@/types";
+import {
+    Button,
+    Container,
+    Flex,
+    PasswordInput,
+    Text,
+    TextInput,
+} from "@mantine/core";
 
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
+import { authActions } from "@/redux/slices/authSlice";
+import { useAppDispatch } from "@/redux/hooks";
 
 const SignupForm = () => {
     const [signup, { isLoading }] = useSignupMutation();
@@ -16,6 +25,7 @@ const SignupForm = () => {
     const [firstName, setFirstName] = React.useState("");
     const [lastName, setLastName] = React.useState("");
 
+    const dispatch = useAppDispatch();
     const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -50,8 +60,11 @@ const SignupForm = () => {
             const { data } = result as { data: LoginResponse };
             console.log("Signup successful:", data);
 
-            const { user } = data.data;
-
+            const {
+                data: { user },
+                token,
+            } = data;
+            dispatch(authActions.setCredentials({ token, user }));
             console.log("user:", user);
             // Redirect the user to another page or perform any other action
         }
@@ -117,6 +130,11 @@ const SignupForm = () => {
                     Signup
                 </Button>
             </form>
+
+            <Flex direction={"column"} align={"center"}>
+                <Text>Already have an account?</Text>
+                <Link to="/auth">Login</Link>
+            </Flex>
         </Container>
     );
 };
